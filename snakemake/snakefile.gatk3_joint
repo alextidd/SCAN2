@@ -21,7 +21,8 @@ rule gatk_scatter:
         # This memory usage is not well-tuned like the sentieon module. DO NOT ATTEMPT
         # to tune this. In an example where 99% of jobs had RSS < 5G, supplying mem_mb=5000
         # failed almost all of the time due to lack of memory. 
-        mem_mb=lambda wildcards, input, threads, attempt: 6000 + (attempt-1)*25000
+        # mem_mb=lambda wildcards, input, threads, attempt: 6000 + (attempt-1)*25000
+        mem_mb=lambda wildcards, input, threads, attempt: 15000 + (attempt-1)*25000
     shell:
         """
         gatk3 \
