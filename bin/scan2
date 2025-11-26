@@ -753,12 +753,28 @@ def run_snakemake(snakemake_command, args, a):
         snakemake_command += [ "--resources",  "mem=" + str(args.memlimit) ]
 
     # handle --cluster or --drmaa and perform %logdir substitution
+    # Updated for Snakemake 8+ which removed --cluster in favor of executor plugins
     if args.cluster is not None or args.drmaa is not None:
         if args.cluster is not None and args.drmaa is not None:
             error('only one of --cluster and --drmaa can be specified')
         if args.cluster is not None:
-            snakemake_command += [ '--cluster',
-                re.sub('%logdir', a.cluster_log_dir, args.cluster) ]
+            cluster_cmd = re.sub('%logdir', a.cluster_log_dir, args.cluster)
+            # Check Snakemake version to determine which syntax to use
+            try:
+                import snakemake
+                snakemake_version = tuple(int(x) for x in snakemake.__version__.split('.')[:2])
+                if snakemake_version >= (8, 0):
+                    # Snakemake 8+ uses executor plugins
+                    snakemake_command += [
+                        '--executor', 'cluster-generic',
+                        '--cluster-generic-submit-cmd', cluster_cmd
+                    ]
+                else:
+                    # Snakemake 7.x and earlier
+                    snakemake_command += [ '--cluster', cluster_cmd ]
+            except:
+                # Fallback to old syntax if version detection fails
+                snakemake_command += [ '--cluster', cluster_cmd ]
         else:
             snakemake_command += [ '--drmaa',
                 re.sub('%logdir', a.cluster_log_dir, args.drmaa) ]
