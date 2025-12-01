@@ -761,7 +761,6 @@ def run_snakemake(snakemake_command, args, a):
             cluster_cmd = re.sub('%logdir', a.cluster_log_dir, args.cluster)
             # Check Snakemake version to determine which syntax to use
             try:
-                import snakemake
                 snakemake_version = tuple(int(x) for x in snakemake.__version__.split('.')[:2])
                 if snakemake_version >= (8, 0):
                     # Snakemake 8+ uses executor plugins
