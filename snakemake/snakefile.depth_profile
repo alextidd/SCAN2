@@ -130,7 +130,7 @@ rule depth_profile_gather:
             tail -n +2 $line ; \
          done) \
         | bgzip --threads {threads} -c > {output.tabgz}
-        tabix --threads {threads} -p vcf -S 1 {output.tabgz}
+        tabix -p vcf -S 1 {output.tabgz}
         """
 
 
