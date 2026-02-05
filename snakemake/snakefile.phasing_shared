@@ -158,6 +158,8 @@ rule phase_chrY:
         config["phaser"] + "/" + config['chrY'] + "/phaser.log"
     benchmark:
         config["phaser"] + "/" + config['chrY'] + "/benchmark_phaser.tsv"
+    resources:
+        mem_mb=250
     shell:
         # bcftools annotate trims down the format field to only the GT tag,
         # to match shapeit's output.
