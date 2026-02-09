@@ -21,7 +21,7 @@ if ('snakemake' %in% ls()) {
 }
 
 args <- commandArgs(trailingOnly=TRUE)
-if (length(args) < 4) {
+if (length(args) < 3) {
     stop("usage: summarize_depth_gather.R genome out.rda in_depth_table1.txt [ in_depth_table2.txt ... in_depth_tableN.txt ]")
 }
 
